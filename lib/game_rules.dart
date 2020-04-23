@@ -1,0 +1,3 @@
+bool canAddCardsToBook() {
+  return true;
+}
