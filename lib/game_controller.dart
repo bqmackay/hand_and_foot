@@ -2,6 +2,7 @@
 
 import 'package:flutter/rendering.dart';
 import 'package:handandfoot/player.dart';
+import 'package:handandfoot/player_turn.dart';
 import 'package:handandfoot/round.dart';
 import 'package:handandfoot/team.dart';
 
@@ -11,7 +12,9 @@ class GameController {
 
 //  Stock
   Deck stock;
+
 //  Discard Pile
+  Deck discardPile = Deck.empty();
 
 //  Teams
   List<Team> teams;
@@ -20,12 +23,17 @@ class GameController {
   List<Player> playerOrder;
 
 //  Current player
+  PlayerTurnController currentPlayerTurn;
+
+  //Current player turn count
+  int _currentPlayerIndex = -1;
 
 //  Rounds
   List<Round> rounds;
 
 //  Current Round
   Round currentRound;
+
 
 //  View
 
@@ -47,11 +55,6 @@ class GameController {
 
     //build the list of rounds
     this._buildRounds();
-  }
-
-  void startGame() {
-    //Start a new round
-    startNextRound();
   }
 
   void _buildDeck() {
@@ -80,6 +83,11 @@ class GameController {
     });
   }
 
+  void startGame() {
+    //Start a new round
+    startNextRound();
+  }
+
   /** Begins a new round
    * public startRound() {
    *    initiate the current round
@@ -96,10 +104,14 @@ class GameController {
     } else {
       this.currentRound = this.rounds[this.currentRound.roundIndex + 1];
     }
+    //inform each team that the next round will start.
+    this._prepareTeamsForNewRound();
+
     //deal cards
     _dealCards();
     //flip card from stock
     this.flipCardFromStockToDiscardPile();
+
     //start next player's turn
     this.startNextPlayerTurn();
   }
@@ -113,7 +125,25 @@ class GameController {
    * }
    */
   void flipCardFromStockToDiscardPile() {
-
+//    *    flip top card off the top of the stock
+    Card card = this.stock.draw();
+    //reshuffle discard pile if stock is empty
+    if (card == null) {
+      return;
+    }
+    //if the card flipped needs to be reshuffled
+    if (
+          card.rank == Rank.two ||
+          card.rank == Rank.joker ||
+          (card.rank == Rank.three && card.color() == CardColor.red)
+    ) {
+      //randomly place the card back in the stock
+      this.stock.randomlyInsertCard(card);
+      //flip card again
+      flipCardFromStockToDiscardPile();
+    } else {
+      this.discardPile.add(card);
+    }
   }
 
   /** Starts the next players turn
@@ -122,7 +152,12 @@ class GameController {
    * }
    */
   void startNextPlayerTurn() {
+    //set the current player to the next player
+    _currentPlayerIndex++;
+    this.currentPlayerTurn = PlayerTurnController(playerOrder[_currentPlayerIndex % playerOrder.length]);
 
+    //Hand the players turn to the view to tell which player's turn it is
+    //view.updatePlayersTurn(this.currentPlayerTurn)
   }
 
   /** A player draws the top two cards from stock
@@ -218,6 +253,13 @@ class GameController {
         player.hand = this.stock.deal(11);
         player.foot = this.stock.deal(11);
       });
+    });
+  }
+
+  //inform each team that a new round will start. This should also prepare each player.
+  void _prepareTeamsForNewRound() {
+    teams.forEach((team) {
+      team.willStartANewRound();
     });
   }
 

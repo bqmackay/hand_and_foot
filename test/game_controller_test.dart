@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:handandfoot/deck.dart';
 import 'package:handandfoot/game_controller.dart';
 import 'package:handandfoot/player.dart';
 import 'package:handandfoot/team.dart';
@@ -45,6 +46,41 @@ void main() {
         });
       });
 
+      //Expect for one card to be in the discard pile
+      expect(controller.discardPile.cards.length, 1);
+      Card topCard = controller.discardPile.cards.first;
+      expect([Rank.two, Rank.joker].contains(topCard.rank), false);
+      expect(topCard.rank != Rank.three && topCard.color() != CardColor.red, true);
+
+      //Expect card to be reshuffled into deck
+      controller.stock.add(Card(Suit.hearts, Rank.three));
+      controller.flipCardFromStockToDiscardPile();
+      topCard = controller.discardPile.cards.first;
+      expect([Rank.two, Rank.joker].contains(topCard.rank), false);
+      expect(topCard.rank == Rank.three && topCard.color() == CardColor.red, false);
+
+      controller.stock.add(Card(Suit.hearts, Rank.two));
+      controller.flipCardFromStockToDiscardPile();
+      topCard = controller.discardPile.cards.first;
+      expect([Rank.two, Rank.joker].contains(topCard.rank), false);
+      expect(topCard.rank != Rank.three && topCard.color() != CardColor.red, true);
+
+      controller.stock.add(Card(Suit.none, Rank.joker));
+      controller.flipCardFromStockToDiscardPile();
+      topCard = controller.discardPile.cards.first;
+      expect([Rank.two, Rank.joker].contains(topCard.rank), false);
+      expect(topCard.rank != Rank.three && topCard.color() != CardColor.red, true);
+
+      //Test that all teams have 12 empty books
+      teams.forEach((team) {
+        expect(team.books.length, 11);
+        team.books.forEach((rank, cards) {
+          expect(cards.length, 0);
+        });
+      });
+
+      //Check that the current player is set
+      expect(controller.currentPlayerTurn != null, true);
     });
 
   });

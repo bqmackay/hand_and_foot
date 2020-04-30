@@ -9,14 +9,10 @@ class Deck {
     cards = _generateFullDeck(numberOfJokers: numberOfJokers);
   }
 
-  void shuffle() {
-    cards.shuffle(Random(0));
-  }
-
-  List<Card> deal(int handSize) {
-    var hand = cards.sublist(0, handSize);
-    cards = cards.sublist(handSize);
-    return hand;
+  static Deck empty() {
+    Deck deck = Deck();
+    deck.cards = List();
+    return deck;
   }
 
   List<Card> _generateFullDeck({int numberOfJokers = 0}) {
@@ -32,6 +28,31 @@ class Deck {
     return cards;
   }
 
+  void shuffle() {
+    cards.shuffle(Random(0));
+  }
+
+  List<Card> deal(int handSize) {
+    var hand = cards.sublist(0, handSize);
+    cards = cards.sublist(handSize);
+    return hand;
+  }
+
+  Card draw() {
+    if (this.cards.length > 0) {
+      return deal(1).first;
+    } else {
+      return null;
+    }
+  }
+
+  void add(Card card, { int index = 0 }) {
+    this.cards.insert(index, card);
+  }
+
+  void randomlyInsertCard(Card card) {
+    cards.insert(Random().nextInt(cards.length), card);
+  }
 }
 
 class Card {
@@ -39,6 +60,27 @@ class Card {
   Rank rank;
 
   Card(this.suit, this.rank);
+
+  CardColor color() {
+    switch (this.suit) {
+      case Suit.diamonds:
+      case Suit.hearts:
+        return CardColor.red;
+        break;
+      case Suit.clubs:
+      case Suit.spades:
+        return CardColor.black;
+        break;
+      default:
+        return CardColor.none;
+    }
+  }
+}
+
+enum CardColor {
+  black,
+  red,
+  none
 }
 
 enum Suit {

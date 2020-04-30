@@ -27,4 +27,6 @@ extension HandAndFootExtension on Card {
  *  otherwise -> no
  * }
  */
+
+
 }
