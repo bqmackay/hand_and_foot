@@ -33,8 +33,14 @@ class Deck {
   }
 
   List<Card> deal(int handSize) {
-    var hand = cards.sublist(0, handSize);
-    cards = cards.sublist(handSize);
+    List<Card> hand;
+    if (cards.length < handSize) {
+      hand = cards.sublist(0);
+    } else {
+      hand = cards.sublist(0, handSize);
+    }
+
+    cards = cards.sublist(hand.length);
     return hand;
   }
 

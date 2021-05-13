@@ -43,5 +43,14 @@ void main() {
       expect(handSize, hand.length);
       expect(totalCardAmount - handSize, deck.cards.length);
     });
+
+    test ("Deal with smaller deck than ask", () {
+      var deck = Deck();
+      var totalCardAmount = deck.cards.length;
+      int handSize = 100;
+      var hand = deck.deal(handSize);
+      expect(handSize != hand.length, true);
+      expect(0, deck.cards.length);
+    });
   });
 }

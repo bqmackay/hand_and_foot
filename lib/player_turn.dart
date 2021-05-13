@@ -25,11 +25,10 @@ class PlayerTurnController {
   List<Card> meldedCards = List();
   
   // the card discarded
-
-  // a flag for if they went out
+  Card discardedCard;
   
   // unusable cards
-  List<Card> unusableCards;
+  List<Card> unusableCards = List();
 
   PlayerTurnController(this.player) {
     this.currentHand = List.from(this.player.hand);
@@ -85,6 +84,7 @@ class PlayerTurnController {
 
   /// Add cards to meld
   /// void addCardsToMeld(List of cards) {
+  ///  ensure all the cards in the list are of the same rank
   ///  cancel the function if the state is not playing
   ///  if the list of cards are not unusable
   ///    move them to the appropriate team book
@@ -93,7 +93,11 @@ class PlayerTurnController {
   ///    otherwise
   ///      add the cards to the list of melded cards
   /// }
-  void addCardsToMeld(List<Card> cards) {
+  void addCardsToMeld(List<Card> cards, Rank rank) {
+    //ensure all the cards in the list are of the same rank
+    if (cards.where((card) => card.rank != rank && card.rank != Rank.two && card.rank != Rank.joker).toList().length > 0) {
+      throw "Cards are not a valid rank";
+    }
     //cancel the function if the state is not playing
     if (currentState != TurnState.playing) { return; }
 
@@ -105,47 +109,61 @@ class PlayerTurnController {
     }
 
     //move them to the appropriate team book
+    this.player.team.addCardsToMeld(cards, rank);
 
-    //if the move is invalid
-      //inform the player
-    //otherwise
-      //add the cards to the list of melded cards
+    //add the cards to the list of melded cards
+    this.meldedCards.addAll(cards);
+    cards.forEach((card) => this.currentHand.remove(card));
   }
 
-  /**
-   * anything that must be done when picking up the foot
-   * void playerWillPickUpFoot() {
-   *  cancel the function if the state is not playing
-   *  inform the players current turn that the initial cards are now the foots cards so that an undo only returns them back to their foot
-   * }
-   */
+  /// Anything that must be done when picking up the foot
+  Future<void> playerWillPickUpFoot() async {
+    //cancel the function if the state is not playing
+    if (currentState != TurnState.playing) { return; }
+    //update the player's hand so that it's empty and can't be undone
+    this.player.hand = currentHand;
+    //clear the melded cards so they can't be undone
+    this.meldedCards = List();
 
-  /**
-   * player's turn will end
-   * void playerTurnWillEnd() {
-   *  set current hand and foot to the players hand or foot
-   *  set if the player is in their foot
-   *  set the state to discard
-   * }
-   */
+    // TODO: inform the players current turn that the initial cards are now the foots cards so that an undo only returns them back to their foot
+  }
 
-  /// Undo all moves and return the player's cards back to their original state
-  /// void undoAllMoves() {
-  ///  cancel if the state is not playing
-  ///  inform the team that all cards that have been played to meld are now removed from their melds
-  ///  set the initial hand to the current hand
-  ///  get the initial foot to the current foot
-  ///  clear the melded cards list
-  /// }
+  /// player's turn will end
+  void playerTurnWillEnd() {
+    //set current hand and foot to the players hand or foot
+    this.player.hand = this.currentHand;
+    this.player.foot = this.currentFoot;
+
+    //set the state to discard
+    currentState = TurnState.discard;
+
+  }
+
+  /// Undo all moves and return the player's cards back to their original state.
+  /// If the team has already gone to their foot, only return them back to
+  /// the state after they picked up their foot.
   void undoAllMoves() {
+    ///  cancel if the state is not playing
+    if (currentState != TurnState.playing) { return; }
+
+    ///  inform the team that all cards that have been played to meld are now removed from their melds
+
+    ///  set the initial hand to the current hand
     this.currentHand = List.from(this.player.hand);
+    ///  get the initial foot to the current foot
     this.currentFoot = List.from(this.player.foot);
+    ///  clear the melded cards list
     this.player.team.undoCardsFromMelds(meldedCards);
     meldedCards.clear();
   }
 
-  // a flag for if they went into their foot
+  /// a flag for if they went into their foot
   bool isInFoot() {
     return this.currentHand.length == 0;
+  }
+
+  /// a flag for the player went out
+  bool didGoOut() {
+    return this.currentFoot.length == 0;
   }
 }

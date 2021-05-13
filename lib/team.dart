@@ -8,8 +8,12 @@ class Team {
 
   // books
   Map<Rank, List<Card>> books;
+
   // a flag for if they can go out
+  bool canGoOut = false;
+
   // a flag for if they're melded
+  bool isMelded = false;
 
   Team(this.players) {
     if (this.players.length != 2) {
@@ -20,13 +24,7 @@ class Team {
     });
   }
 
-/**
- * Prepare the team for a new round
- * void willStartANewRound() {
- *  clean out the books
- *  clean out the player's hands and foots
- * }
- */
+/// Prepare the team for a new round
   void willStartANewRound() {
     //clean out the books
     books = Map();
@@ -43,23 +41,19 @@ class Team {
     });
   }
 
-/**
-   * Add cards to meld
-   * void addCardsToMeld(list of cards) {
-   *  if the cards can be added to the meld
-   *    add the cards to the meld
-   * }
-   */
+  /// Add cards to meld
+  /// void addCardsToMeld(list of cards) {
+  ///  if the cards can be added to the meld
+  ///    add the cards to the meld
+  /// }
   void addCardsToMeld(List<Card> cards, Rank rank) {
     books[rank].addAll(cards);
   }
 
-  /**
-   * Removes the given cards from the meld
-   * void removeCardsFromMelds(list of cards to remove from melds) {
-   *  Cycle through each book to remove any card in the list of cards given.
-   * }
-   */
+  /// Removes the given cards from the meld
+  /// void removeCardsFromMelds(list of cards to remove from melds) {
+  ///  Cycle through each book to remove any card in the list of cards given.
+  /// }
   void undoCardsFromMelds(List<Card> cards) {
     //Cycle through each book to remove any card in the list of cards given.
     books.forEach((rank, meld) {

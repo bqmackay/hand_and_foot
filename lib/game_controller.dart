@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:handandfoot/player.dart';
 import 'package:handandfoot/player_turn.dart';
 import 'package:handandfoot/round.dart';
+import 'package:handandfoot/scorer.dart';
 import 'package:handandfoot/team.dart';
 
 import 'deck.dart';
@@ -167,47 +168,71 @@ class GameController {
    * }
    */
   void drawFromStock(Player player) {
-
+    currentPlayerTurn.addStockCardsToHand(stock.deal(2));
   }
 
-  /** A player draws from the discard pile. This must be accompanied by a check that they are allowed to pick up from the discard pile.
-   * public draw from discard pile {
-   *    check if player can pick up from the discard pile
-   *      if so, give them the top card and the other 6 separately
-   *    otherwise
-   *      send the player a message that they can't
-   * }
-   */
+  /// A player draws from the discard pile. This must be accompanied by a check that they are allowed to pick up from the discard pile.
+  /// public draw from discard pile {
+  ///    check if player can pick up from the discard pile
+  ///      if so, give them the top card and the other 6 separately
+  ///    otherwise
+  ///      send the player a message that they can't
+  /// }
   void drawFromDiscardIfAble(Player player) {
+    //check if player can pick up from the discard pile
+    if (!_playerCanDrawFromDiscardPile()) {
+      throw "Player cannot draw from discard pile";
+    }
 
+    //if so, give them the top card and the other 6 separately
+    currentPlayerTurn.addDiscardCardsToHand(discardPile.deal(7));
   }
 
-  /**
-   * End the current players turn
-   * void end current turn {
-   *  if the current player's team is melded
-   *    send the current player's moves to the rest of the table
-   *    start the next player's turn
-   * }
-   */
+  bool _playerCanDrawFromDiscardPile() {
+    Card topCard = discardPile.cards.last;
+
+    //get hand or foot (whichever the player is currently in)
+    List<Card> playersCards = currentPlayerTurn.currentHand;
+    if (playersCards.isEmpty) {
+      playersCards = currentPlayerTurn.currentFoot;
+    }
+
+    //get the book from the team to see if it exists
+    var book = currentPlayerTurn.player.team.books[topCard.rank];
+
+    bool playerHasSufficientCardsInHand = playersCards.where((card) => card.rank == topCard.rank || card.rank == Rank.two || card.rank == Rank.joker).toList().length > 1;
+    bool bookAlreadyExists = book.length > 2;
+    return playerHasSufficientCardsInHand || bookAlreadyExists;
+  }
+
+  /// End the current players turn
+  /// void end current turn {
+  ///  if the current player's team is melded
+  ///    send the current player's moves to the rest of the table
+  ///    start the next player's turn
+  /// }
   void endCurrentPlayerTurn() {
-
+//    if the current player's team is melded
+    var currentTeam = this.currentPlayerTurn.player.team;
+    var scorer = Scorer();
+    if (scorer.calculateTeamBooks(currentTeam) < currentRound.pointsToMeld) {
+      throw("Needs more points or undo their moves");
+    }
   }
 
-  /** At the end of the player's turn, the turn is revealed to all the other players.
-   * public show players turn {
-   *    send all melds from the hand to the board for display
-   *    send picking up foot to the board for display
-   *    send all melds from the foot to the board for display
-   *    if the player discarded
-   *      send the discard to the board for display
-   *
-   *    if the player is out of cards
-   *      end the round
-   *    otherwise
-   *      start next player's turn
-   * }
-   */
+  /// At the end of the player's turn, the turn is revealed to all the other players.
+  /// public show players turn {
+  ///    send all melds from the hand to the board for display
+  ///    send picking up foot to the board for display
+  ///    send all melds from the foot to the board for display
+  ///    if the player discarded
+  ///      send the discard to the board for display
+  ///
+  ///    if the player is out of cards
+  ///      end the round
+  ///    otherwise
+  ///      start next player's turn
+  /// }
   void sendPlayerTurnToTable(Player player) {
 
   }
