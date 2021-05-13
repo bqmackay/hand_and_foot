@@ -1,16 +1,13 @@
 // Import the test package and Counter class
-import 'package:flutter/foundation.dart';
 import 'package:handandfoot/game_controller.dart';
 import 'package:handandfoot/player.dart';
 import 'package:handandfoot/player_turn.dart';
 import 'package:handandfoot/team.dart';
 import 'package:test/test.dart';
 import 'package:handandfoot/deck.dart';
-import 'package:collection/collection.dart';
 
 void main() {
-  group('Player Turn', ()
-  {
+  group('Player Turn', () {
     Player player = Player("Abe");
     Player player2 = Player("Bob");
     Player player3 = Player("Xander");
@@ -55,6 +52,7 @@ void main() {
       expect(controller.currentHand != player.hand, true);
       expect(controller.currentFoot != player.foot, true);
 
+      controller.currentState = TurnState.playing;
       controller.undoAllMoves();
       expect(controller.currentHand, player.hand);
       expect(controller.currentFoot, player.foot);
@@ -62,10 +60,10 @@ void main() {
       controller.player.team.books.forEach((rank, meld) {
         expect(meld.isEmpty, true);
       });
-
     });
 
-    test("After picking up foot, undo leaves all cards prior to picking up", () {
+    test("After picking up foot, undo leaves all cards prior to picking up",
+        () {
       var gameController = GameController([team, team2]);
       gameController.gameWillStart();
       gameController.startGame();
@@ -81,7 +79,9 @@ void main() {
 
       controller.addStockCardsToHand(List());
       player.hand.forEach((card) {
-        if (card.rank == Rank.joker || card.rank == Rank.two || card.rank == Rank.three) {
+        if (card.rank == Rank.joker ||
+            card.rank == Rank.two ||
+            card.rank == Rank.three) {
           return;
         }
         controller.addCardsToMeld([card], card.rank);
@@ -100,7 +100,6 @@ void main() {
       });
 
       expect(controller.player.team.books.length > 0, true);
-
     });
 
     test("draw from stock", () {
@@ -171,8 +170,9 @@ void main() {
 
       //Get a deck with 3 5's to meld
       while (player.hand.where((card) {
-        return card.rank == Rank.five;
-      }).length <= 3) {
+            return card.rank == Rank.five;
+          }).length <=
+          3) {
         Deck deck = Deck();
         player.hand = deck.deal(52);
         player.foot = deck.deal(0);
@@ -183,7 +183,9 @@ void main() {
       controller.addStockCardsToHand(List());
 
       //meld the 5's
-      List<Card> fives = player.hand.where((card) { return card.rank == Rank.five; }).toList();
+      List<Card> fives = player.hand.where((card) {
+        return card.rank == Rank.five;
+      }).toList();
       controller.addCardsToMeld(fives, Rank.five);
 
       //expect the team to have a meld of 5's
@@ -191,7 +193,6 @@ void main() {
 
       //expect the controller to keep a record of the cards that are melded
       expect(controller.meldedCards.length, fives.length);
-
     });
   });
 }

@@ -2,11 +2,7 @@ import 'package:handandfoot/player.dart';
 
 import 'deck.dart';
 
-enum TurnState {
-  pickup,
-  playing,
-  discard
-}
+enum TurnState { pickup, playing, discard }
 
 class PlayerTurnController {
   // the player
@@ -23,10 +19,10 @@ class PlayerTurnController {
 
   // the cards played to meld
   List<Card> meldedCards = List();
-  
+
   // the card discarded
   Card discardedCard;
-  
+
   // unusable cards
   List<Card> unusableCards = List();
 
@@ -44,7 +40,9 @@ class PlayerTurnController {
   /// }
   void addStockCardsToHand(List<Card> cards) {
     //cancel the function if the state is not pickup
-    if (currentState != TurnState.pickup) { return; }
+    if (currentState != TurnState.pickup) {
+      return;
+    }
     //add the cards to the either the hand or foot (whichever is playable)
     //add the cards to the player's hand or foot so we know where to undo to
     if (isInFoot()) {
@@ -59,7 +57,6 @@ class PlayerTurnController {
     this.currentState = TurnState.playing;
   }
 
-
   /// add the remaining cards from the discard pile pickup to the unusable cards for the duration of the turn
   /// void addDiscardCardsToHand {
   ///  cancel the function if the state is not pickup
@@ -71,7 +68,9 @@ class PlayerTurnController {
 
   void addDiscardCardsToHand(List<Card> cards) {
     //cancel the function if the state is not pickup
-    if (currentState != TurnState.pickup) { return; }
+    if (currentState != TurnState.pickup) {
+      return;
+    }
 
     //add the cards to the either the hand or foot (whichever is playable)
     //Set the player's turn initial hand
@@ -95,16 +94,26 @@ class PlayerTurnController {
   /// }
   void addCardsToMeld(List<Card> cards, Rank rank) {
     //ensure all the cards in the list are of the same rank
-    if (cards.where((card) => card.rank != rank && card.rank != Rank.two && card.rank != Rank.joker).toList().length > 0) {
+    if (cards
+            .where((card) =>
+                card.rank != rank &&
+                card.rank != Rank.two &&
+                card.rank != Rank.joker)
+            .toList()
+            .length >
+        0) {
       throw "Cards are not a valid rank";
     }
     //cancel the function if the state is not playing
-    if (currentState != TurnState.playing) { return; }
+    if (currentState != TurnState.playing) {
+      return;
+    }
 
     //if the list of cards are not unusable
     List<Card> unusableCardCheckList = List.of(unusableCards);
     unusableCardCheckList.addAll(cards);
-    if (unusableCardCheckList.toSet().length != cards.length + unusableCards.length) {
+    if (unusableCardCheckList.toSet().length !=
+        cards.length + unusableCards.length) {
       throw "Unusable cards were attempted to meld";
     }
 
@@ -119,7 +128,9 @@ class PlayerTurnController {
   /// Anything that must be done when picking up the foot
   Future<void> playerWillPickUpFoot() async {
     //cancel the function if the state is not playing
-    if (currentState != TurnState.playing) { return; }
+    if (currentState != TurnState.playing) {
+      return;
+    }
     //update the player's hand so that it's empty and can't be undone
     this.player.hand = currentHand;
     //clear the melded cards so they can't be undone
@@ -136,7 +147,6 @@ class PlayerTurnController {
 
     //set the state to discard
     currentState = TurnState.discard;
-
   }
 
   /// Undo all moves and return the player's cards back to their original state.
@@ -144,14 +154,18 @@ class PlayerTurnController {
   /// the state after they picked up their foot.
   void undoAllMoves() {
     ///  cancel if the state is not playing
-    if (currentState != TurnState.playing) { return; }
+    if (currentState != TurnState.playing) {
+      return;
+    }
 
     ///  inform the team that all cards that have been played to meld are now removed from their melds
 
     ///  set the initial hand to the current hand
     this.currentHand = List.from(this.player.hand);
+
     ///  get the initial foot to the current foot
     this.currentFoot = List.from(this.player.foot);
+
     ///  clear the melded cards list
     this.player.team.undoCardsFromMelds(meldedCards);
     meldedCards.clear();

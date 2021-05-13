@@ -1,6 +1,6 @@
 import 'package:handandfoot/deck.dart';
 
-extension HandAndFootExtension on Card {
+// extension HandAndFootExtension on Card {
 
 /**
  * points {
@@ -28,5 +28,4 @@ extension HandAndFootExtension on Card {
  * }
  */
 
-
-}
+// }
