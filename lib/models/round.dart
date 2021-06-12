@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 class Round {
   // the index of this round
   int roundIndex;
@@ -23,11 +21,9 @@ class Round {
         pointsToMeld = 150;
         break;
       default:
-        throw("Only 4 rounds are allowed in Hand and Foot");
+        throw ("Only 4 rounds are allowed in Hand and Foot");
     }
   }
-
-
 }
 
 class TeamRound {

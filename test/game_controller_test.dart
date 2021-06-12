@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:handandfoot/models/deck.dart';
 import 'package:handandfoot/models/game_controller.dart';
@@ -27,6 +29,7 @@ void main() {
     });
 
     test("Starting the first round ensures all players are ready", () {
+      debugger();
       var controller = GameController(teams);
       controller.gameWillStart();
       controller.startGame();

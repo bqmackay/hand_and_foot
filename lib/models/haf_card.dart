@@ -1,5 +1,3 @@
-import './deck.dart';
-
 // extension HandAndFootExtension on Card {
 
 /**

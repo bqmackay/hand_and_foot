@@ -18,13 +18,13 @@ class PlayerTurnController {
   TurnState currentState = TurnState.pickup;
 
   // the cards played to meld
-  List<Card> meldedCards = List();
+  List<Card> meldedCards = [];
 
   // the card discarded
   Card discardedCard;
 
   // unusable cards
-  List<Card> unusableCards = List();
+  List<Card> unusableCards = [];
 
   PlayerTurnController(this.player) {
     this.currentHand = List.from(this.player.hand);
@@ -134,7 +134,7 @@ class PlayerTurnController {
     //update the player's hand so that it's empty and can't be undone
     this.player.hand = currentHand;
     //clear the melded cards so they can't be undone
-    this.meldedCards = List();
+    this.meldedCards = [];
 
     // TODO: inform the players current turn that the initial cards are now the foots cards so that an undo only returns them back to their foot
   }

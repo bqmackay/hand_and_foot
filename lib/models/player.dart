@@ -8,9 +8,9 @@ class Player {
   // their team
   Team team;
   // hand
-  List<Card> hand = List();
+  List<Card> hand = [];
   // foot
-  List<Card> foot = List();
+  List<Card> foot = [];
   // is_foot_in_use
   // players current turn
 

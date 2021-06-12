@@ -31,13 +31,13 @@ class Team {
     Rank.values.forEach((rank) {
       //continue if the rank cannot have its own book
       if (![Rank.two, Rank.three, Rank.joker].contains(rank)) {
-        books[rank] = List();
+        books[rank] = [];
       }
     });
     //clean out the player's hands and foots
     this.players.forEach((player) {
-      player.hand = List();
-      player.foot = List();
+      player.hand = [];
+      player.foot = [];
     });
   }
 
