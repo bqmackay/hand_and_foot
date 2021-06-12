@@ -1,4 +1,4 @@
-import 'package:handandfoot/deck.dart';
+import './deck.dart';
 
 // extension HandAndFootExtension on Card {
 

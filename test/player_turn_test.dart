@@ -1,10 +1,10 @@
 // Import the test package and Counter class
-import 'package:handandfoot/game_controller.dart';
-import 'package:handandfoot/player.dart';
-import 'package:handandfoot/player_turn.dart';
-import 'package:handandfoot/team.dart';
+import 'package:handandfoot/models/game_controller.dart';
+import 'package:handandfoot/models/player.dart';
+import 'package:handandfoot/models/player_turn.dart';
+import 'package:handandfoot/models/team.dart';
 import 'package:test/test.dart';
-import 'package:handandfoot/deck.dart';
+import 'package:handandfoot/models/deck.dart';
 
 void main() {
   group('Player Turn', () {
@@ -77,7 +77,7 @@ void main() {
       PlayerTurnController controller = PlayerTurnController(player);
       controller.currentState = TurnState.playing;
 
-      controller.addStockCardsToHand(List());
+      controller.addStockCardsToHand([]);
       player.hand.forEach((card) {
         if (card.rank == Rank.joker ||
             card.rank == Rank.two ||
@@ -87,7 +87,7 @@ void main() {
         controller.addCardsToMeld([card], card.rank);
       });
 
-      controller.currentHand = List();
+      controller.currentHand = [];
       controller.playerWillPickUpFoot();
 
       controller.undoAllMoves();
@@ -180,7 +180,7 @@ void main() {
 
       //create a new player turn
       PlayerTurnController controller = PlayerTurnController(player);
-      controller.addStockCardsToHand(List());
+      controller.addStockCardsToHand([]);
 
       //meld the 5's
       List<Card> fives = player.hand.where((card) {

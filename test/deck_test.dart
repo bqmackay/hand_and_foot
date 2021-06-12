@@ -1,8 +1,7 @@
 // Import the test package and Counter class
 import 'package:flutter/foundation.dart';
 import 'package:test/test.dart';
-import 'package:handandfoot/deck.dart';
-import 'package:collection/collection.dart';
+import 'package:handandfoot/models/deck.dart';
 
 void main() {
   group('Deck Creation', () {
@@ -16,7 +15,8 @@ void main() {
       int numberOfJokers = 2;
       var deck = Deck(numberOfJokers: numberOfJokers);
       expect(deck.cards.length, numberOfCardsInDeck + numberOfJokers);
-      var actualNumberOfJokers = deck.cards.where((card) => card.rank == Rank.joker).length;
+      var actualNumberOfJokers =
+          deck.cards.where((card) => card.rank == Rank.joker).length;
       expect(actualNumberOfJokers, numberOfJokers);
     });
   });
@@ -35,7 +35,7 @@ void main() {
       expect(false, listEquals(newOrder, secondOrder));
     });
 
-    test ("Deal", () {
+    test("Deal", () {
       var deck = Deck();
       var totalCardAmount = deck.cards.length;
       int handSize = 5;
@@ -44,9 +44,8 @@ void main() {
       expect(totalCardAmount - handSize, deck.cards.length);
     });
 
-    test ("Deal with smaller deck than ask", () {
+    test("Deal with smaller deck than ask", () {
       var deck = Deck();
-      var totalCardAmount = deck.cards.length;
       int handSize = 100;
       var hand = deck.deal(handSize);
       expect(handSize != hand.length, true);

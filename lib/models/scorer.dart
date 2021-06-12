@@ -1,4 +1,4 @@
-import 'package:handandfoot/team.dart';
+import './team.dart';
 
 class Scorer {
   /**
@@ -11,9 +11,7 @@ class Scorer {
    *  if the team went out, add 100 points
    * }
     */
-  void calculateTeamScore(Team team) {
-
-  }
+  void calculateTeamScore(Team team) {}
 
   /**
    * calculate the team's books {

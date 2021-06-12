@@ -1,16 +1,12 @@
-
-
-import 'package:flutter/rendering.dart';
-import 'package:handandfoot/player.dart';
-import 'package:handandfoot/player_turn.dart';
-import 'package:handandfoot/round.dart';
-import 'package:handandfoot/scorer.dart';
-import 'package:handandfoot/team.dart';
+import './player.dart';
+import './player_turn.dart';
+import './round.dart';
+import './scorer.dart';
+import './team.dart';
 
 import 'deck.dart';
 
 class GameController {
-
 //  Stock
   Deck stock;
 
@@ -34,7 +30,6 @@ class GameController {
 
 //  Current Round
   Round currentRound;
-
 
 //  View
 
@@ -133,11 +128,9 @@ class GameController {
       return;
     }
     //if the card flipped needs to be reshuffled
-    if (
-          card.rank == Rank.two ||
-          card.rank == Rank.joker ||
-          (card.rank == Rank.three && card.color() == CardColor.red)
-    ) {
+    if (card.rank == Rank.two ||
+        card.rank == Rank.joker ||
+        (card.rank == Rank.three && card.color() == CardColor.red)) {
       //randomly place the card back in the stock
       this.stock.randomlyInsertCard(card);
       //flip card again
@@ -155,7 +148,8 @@ class GameController {
   void startNextPlayerTurn() {
     //set the current player to the next player
     _currentPlayerIndex++;
-    this.currentPlayerTurn = PlayerTurnController(playerOrder[_currentPlayerIndex % playerOrder.length]);
+    this.currentPlayerTurn = PlayerTurnController(
+        playerOrder[_currentPlayerIndex % playerOrder.length]);
 
     //Hand the players turn to the view to tell which player's turn it is
     //view.updatePlayersTurn(this.currentPlayerTurn)
@@ -200,7 +194,14 @@ class GameController {
     //get the book from the team to see if it exists
     var book = currentPlayerTurn.player.team.books[topCard.rank];
 
-    bool playerHasSufficientCardsInHand = playersCards.where((card) => card.rank == topCard.rank || card.rank == Rank.two || card.rank == Rank.joker).toList().length > 1;
+    bool playerHasSufficientCardsInHand = playersCards
+            .where((card) =>
+                card.rank == topCard.rank ||
+                card.rank == Rank.two ||
+                card.rank == Rank.joker)
+            .toList()
+            .length >
+        1;
     bool bookAlreadyExists = book.length > 2;
     return playerHasSufficientCardsInHand || bookAlreadyExists;
   }
@@ -216,7 +217,7 @@ class GameController {
     var currentTeam = this.currentPlayerTurn.player.team;
     var scorer = Scorer();
     if (scorer.calculateTeamBooks(currentTeam) < currentRound.pointsToMeld) {
-      throw("Needs more points or undo their moves");
+      throw ("Needs more points or undo their moves");
     }
   }
 
@@ -233,9 +234,7 @@ class GameController {
   ///    otherwise
   ///      start next player's turn
   /// }
-  void sendPlayerTurnToTable(Player player) {
-
-  }
+  void sendPlayerTurnToTable(Player player) {}
 
   /** Perform any action that occurs at the end of the round
    * private end round {
@@ -244,9 +243,7 @@ class GameController {
    *    listen for all players to be ready for the next round
    * }
    */
-  void endRound() {
-
-  }
+  void endRound() {}
 
   /** Inform the game that a player is ready for the next round. When all players acknowledge this, the round will start.
    * public player is ready for next round {
@@ -260,9 +257,7 @@ class GameController {
    *      let all other players know the count of players ready to go
    * }
    */
-  void playerIsReadyForNextRound(Player player) {
-
-  }
+  void playerIsReadyForNextRound(Player player) {}
 
   void _buildRounds() {
     this.rounds = List(4);
@@ -287,5 +282,4 @@ class GameController {
       team.willStartANewRound();
     });
   }
-
 }

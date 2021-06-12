@@ -1,4 +1,4 @@
-import 'package:handandfoot/player.dart';
+import './player.dart';
 
 import 'deck.dart';
 
@@ -17,14 +17,14 @@ class Team {
 
   Team(this.players) {
     if (this.players.length != 2) {
-      throw("Teams are limited to 2 players");
+      throw ("Teams are limited to 2 players");
     }
     this.players.forEach((player) {
       player.team = this;
     });
   }
 
-/// Prepare the team for a new round
+  /// Prepare the team for a new round
   void willStartANewRound() {
     //clean out the books
     books = Map();

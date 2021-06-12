@@ -1,4 +1,4 @@
-import 'package:handandfoot/team.dart';
+import './team.dart';
 
 import 'deck.dart';
 
@@ -16,7 +16,7 @@ class Player {
 
   Player(this.name) {
     if (this.name.isEmpty) {
-      throw("Player name must not be empty");
+      throw ("Player name must not be empty");
     }
   }
 

@@ -1,4 +1,4 @@
-import 'package:handandfoot/team.dart';
+import './team.dart';
 
 class GameSetup {
   // a list of teams as they're created
@@ -8,9 +8,7 @@ class GameSetup {
    *  take the team and add it to the game controller
    * }
    */
-  void addTeam(Team team) {
-
-  }
+  void addTeam(Team team) {}
 
   /**
    * Start Game {
@@ -18,7 +16,5 @@ class GameSetup {
    *  start the game
    *  }
    */
-  void startGame() {
-
-  }
+  void startGame() {}
 }

@@ -1,4 +1,4 @@
-import 'package:handandfoot/player.dart';
+import './player.dart';
 
 import 'deck.dart';
 
