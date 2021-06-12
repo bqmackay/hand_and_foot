@@ -29,7 +29,6 @@ void main() {
     });
 
     test("Starting the first round ensures all players are ready", () {
-      debugger();
       var controller = GameController(teams);
       controller.gameWillStart();
       controller.startGame();
@@ -65,6 +64,15 @@ void main() {
           false);
 
       controller.stock.add(Card(Suit.none, Rank.joker));
+      controller.flipCardFromStockToDiscardPile();
+      topCard = controller.discardPile.cards.first;
+      expect([Rank.two, Rank.joker].contains(topCard.rank), false);
+      expect(topCard.rank == Rank.three && topCard.color() == CardColor.red,
+          false);
+
+      controller.stock.add(Card(Suit.heart, Rank.two));
+      controller.stock.add(Card(Suit.none, Rank.joker));
+      controller.stock.add(Card(Suit.heart, Rank.three));
       controller.flipCardFromStockToDiscardPile();
       topCard = controller.discardPile.cards.first;
       expect([Rank.two, Rank.joker].contains(topCard.rank), false);
