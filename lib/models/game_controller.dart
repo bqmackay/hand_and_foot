@@ -35,6 +35,7 @@ class GameController {
 
   GameController(this.teams);
 
+  // ignore: slash_for_doc_comments
   /** Performs any function that is required to start the game
    * public startGame {
    *   Build the deck
@@ -62,15 +63,14 @@ class GameController {
     });
   }
 
-  /** Creates the turn order for players
-   * private create order of players {
-   *    cycle through each team and get their players
-   *      place each team player in the order apart from their other team player by the number of teams in the game
-   *    set order of players to local variable for future reference
-   * }
-   */
+  /// Creates the turn order for players
+  /// private create order of players {
+  ///    cycle through each team and get their players
+  ///      place each team player in the order apart from their other team player by the number of teams in the game
+  ///    set order of players to local variable for future reference
+  /// }
   void _setOrderOfPlayers() {
-    playerOrder = List(teams.length * 2);
+    playerOrder = List.filled(teams.length * 2, null);
     //cycle through each team and get their players
     teams.asMap().forEach((i, team) {
       //place each team player in the order apart from their other team player by the number of teams in the game
@@ -84,15 +84,14 @@ class GameController {
     startNextRound();
   }
 
-  /** Begins a new round
-   * public startRound() {
-   *    initiate the current round
-   *    add round to the list of rounds
-   *    deal cards
-   *    flip card from stock
-   *    start next player's turn
-   * }
-   */
+  /// Begins a new round
+  /// public startRound() {
+  ///    initiate the current round
+  ///    add round to the list of rounds
+  ///    deal cards
+  ///    flip card from stock
+  ///    start next player's turn
+  /// }
   void startNextRound() {
     //initiate the current round
     if (this.currentRound == null) {
@@ -112,14 +111,13 @@ class GameController {
     this.startNextPlayerTurn();
   }
 
-  /** Turns the top card from stock over and onto the discard pile. It also determines if the card is allowed to be on the discard pile
-   * private flip card from stock {
-   *    flip top card off the top of the stock
-   *    if the card flipped needs to be reshuffled
-   *      randomly place the card back in the stock
-   *      flip card again
-   * }
-   */
+  /// Turns the top card from stock over and onto the discard pile. It also determines if the card is allowed to be on the discard pile
+  /// private flip card from stock {
+  ///    flip top card off the top of the stock
+  ///    if the card flipped needs to be reshuffled
+  ///      randomly place the card back in the stock
+  ///      flip card again
+  /// }
   void flipCardFromStockToDiscardPile() {
 //    *    flip top card off the top of the stock
     Card card = this.stock.draw();
@@ -140,11 +138,10 @@ class GameController {
     }
   }
 
-  /** Starts the next players turn
-   * public start next player {
-   *    set the current player to the next player
-   * }
-   */
+  /// Starts the next players turn
+  /// public start next player {
+  ///    set the current player to the next player
+  /// }
   void startNextPlayerTurn() {
     //set the current player to the next player
     _currentPlayerIndex++;
@@ -155,12 +152,11 @@ class GameController {
     //view.updatePlayersTurn(this.currentPlayerTurn)
   }
 
-  /** A player draws the top two cards from stock
-   * public draw from stock {
-   *    get top two cards
-   *    give them to the current player
-   * }
-   */
+  /// A player draws the top two cards from stock
+  /// public draw from stock {
+  ///    get top two cards
+  ///    give them to the current player
+  /// }
   void drawFromStock(Player player) {
     currentPlayerTurn.addStockCardsToHand(stock.deal(2));
   }
@@ -236,31 +232,29 @@ class GameController {
   /// }
   void sendPlayerTurnToTable(Player player) {}
 
-  /** Perform any action that occurs at the end of the round
-   * private end round {
-   *    tell the scorer to tally scores
-   *    display scores to each player
-   *    listen for all players to be ready for the next round
-   * }
-   */
+  /// Perform any action that occurs at the end of the round
+  /// private end round {
+  ///    tell the scorer to tally scores
+  ///    display scores to each player
+  ///    listen for all players to be ready for the next round
+  /// }
   void endRound() {}
 
-  /** Inform the game that a player is ready for the next round. When all players acknowledge this, the round will start.
-   * public player is ready for next round {
-   *    mark that the player is ready for the next round
-   *
-   *    if all players are ready
-   *      shift the player order by one
-   *      put all cards back into stock
-   *      start next round
-   *    else
-   *      let all other players know the count of players ready to go
-   * }
-   */
+  /// Inform the game that a player is ready for the next round. When all players acknowledge this, the round will start.
+  /// public player is ready for next round {
+  ///    mark that the player is ready for the next round
+  ///
+  ///    if all players are ready
+  ///      shift the player order by one
+  ///      put all cards back into stock
+  ///      start next round
+  ///    else
+  ///      let all other players know the count of players ready to go
+  /// }
   void playerIsReadyForNextRound(Player player) {}
 
   void _buildRounds() {
-    this.rounds = List(4);
+    this.rounds = List.filled(4, null);
     for (var i = 0; i < this.rounds.length; i++) {
       this.rounds[i] = Round(i);
     }

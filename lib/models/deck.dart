@@ -146,6 +146,7 @@ extension RankExtension on Rank {
       case Rank.king:
         return "king";
     }
+    return "";
   }
 }
 
@@ -163,5 +164,6 @@ extension SuitExtension on Suit {
       case Suit.spade:
         return "spade";
     }
+    return "";
   }
 }
