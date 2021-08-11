@@ -1,6 +1,6 @@
 # handandfoot
 
-Hand and Foot project for the family
+Hand and Foot project for the family.
 
 ## Getting Started
 
